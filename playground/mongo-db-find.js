@@ -1,5 +1,5 @@
 //const MongoClient = require('mongodb').MongoClient;
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectID} = require('mongodb');
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
@@ -30,5 +30,13 @@ MongoClient.connect(url, (err, client) => {
     }, err => {
         console.log('Error getting all documents', err);
     });
+
+    db.collection('Todos').find({_id: new ObjectID('5b69f994ca0a3625542a8a34')}).toArray().then(docs => {
+        console.log('Document with ID 5b69f994ca0a3625542a8a34:');
+        docs.forEach(d => console.log(JSON.stringify(d)));
+    }, err => {
+        console.log('Error getting all documents', err);
+    });
+
     client.close();
 });
