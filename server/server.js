@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var {mongoose} = require('./db/mongoose');
-var {Todo} = require('./models/Todo');
+var {Todo} = require('./models/todo');
 //same as var mongoose = require('./db/mongoose').mongoose
 
 app.use(bodyParser.json());//register json parser middleware
@@ -26,3 +26,5 @@ var port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running and listening on port ${port}`);
 });
+
+module.exports = {app};
