@@ -1,22 +1,9 @@
-var mongoose = require('mongoose');
-
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodosApp');
-
-var Todo = mongoose.model('Todo', {
-    text: {
-        type: String
-    },
-    completed: {
-        type: Boolean
-    },
-    completedAt: {
-        type: Number
-    }
-});
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/Todo');
+//same as var mongoose = require('./db/mongoose').mongoose
 
 var newTodo = new Todo({
-    text: 'Make dinner'
+    text: '  Make lunch  '
 });
 
 newTodo.save().then(doc=>{
