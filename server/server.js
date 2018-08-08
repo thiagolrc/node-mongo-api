@@ -1,5 +1,5 @@
 var express = require('express');
-var body_parser = require('body-parser');
+var bodyParser = require('body-parser');
 
 var app = express();
 
@@ -7,14 +7,19 @@ var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/Todo');
 //same as var mongoose = require('./db/mongoose').mongoose
 
-var newTodo = new Todo({
-    text: '  Make lunch  '
-});
+app.use(bodyParser.json());//register json parser middleware
 
-newTodo.save().then(doc=>{
-    console.log('Saved', doc);
-}, err => {
-    console.log('Could not save Todo', err);
+app.post('/todos', (req, res) => {
+    var todo = new Todo({
+        text: req.body.text
+    });
+
+    todo.save().then(doc => {
+        res.send(doc);
+    }, err =>{
+        res.status(400).send(err); //remember that 'save' aplies validation
+    });
+
 });
 
 var port = process.env.PORT || 3000;
