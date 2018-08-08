@@ -1,4 +1,4 @@
-var {mongoose} = require('../db/mongoose');
+var mongoose = require('mongoose'); //no need to import our module since we're not using the db connection
 
 var Todo = mongoose.model('Todo', {
     text: {
