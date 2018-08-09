@@ -1,11 +1,15 @@
 const expect = require('expect');
 const request = require('supertest');
+const {ObjectID} = require('mongodb');
 
 const {app} = require('./server');
 var {Todo} = require('./models/todo');
 var {mongoose} = require('./db/mongoose');
 
-var todos = [{text: "Todo1"}, {text: "Todo2"}];
+var todos = [
+    {_id: new ObjectID(), text: "Todo123"}, 
+    {_id: new ObjectID(), text: "Todo124"}
+];
 
 beforeEach((done) => {
     Todo.remove({}).then(()=> {
@@ -50,12 +54,7 @@ describe('POST /todos', () => {
             .expect((res) => {
                 expect(res.body.message).toBe('Todo validation failed: text: Path `text` (``) is shorter than the minimum allowed length (1).');
             })
-            .end( (err, res) => {
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
+            .end(done);
     });
 });
 
@@ -67,11 +66,33 @@ describe('GET /todos', () => {
             .expect((res) => {
                 expect(res.body.length).toBe(2);
             })
-            .end( (err, res) => {
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
+            .end(done);
     });
 });
+
+describe('GET /todos/:id', () => {
+    it('should return 404 when id is invalid', (done) => {
+        request(app)
+            .get('/todos/adsfasdfasfafadfasfsdafadsfasf')
+            .expect(404)
+            .end(done);
+    });
+    
+    it('should return 404 when id does not exist', (done) => {
+        request(app)
+            .get('/todos/12345')
+            .expect(404)
+            .end(done);
+    });
+
+    it('should return the Todo identified by id', (done) => {
+        request(app)
+            .get('/todos/'+todos[0]._id.toHexString())
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.text).toBe(todos[0].text);
+            })
+            .end(done);
+    });
+});
+
