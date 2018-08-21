@@ -1,12 +1,4 @@
-var env = proces.env.NODE_ENV || 'development';
-
-if (env === 'development') {
-    process.env.PORT = 3000;
-    process.env.MONGODB_URI = 'mongodb://localhost:27017/TodosApp';
-} else if (env === 'test') {
-    process.env.PORT = 3000;
-    process.env.MONGODB_URI = 'mongodb://localhost:27017/TodosAppTest';
-}
+require('./config/config');
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -39,7 +31,7 @@ app.get('/todos', (req, res) => {
             res.send(todos);
         },
         (e) => {
-            res.status(400).send(err); 
+            res.status(400).send(err);
         }
     );
 });
@@ -55,7 +47,7 @@ app.get('/todos/:id', async (req, res) => {
 
         if (!todo) {
             return res.status(404).send();
-        } 
+        }
         res.send(todo);
     }catch(e) {
         res.status(404).send(e)
